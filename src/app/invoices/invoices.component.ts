@@ -86,13 +86,20 @@ export class InvoicesComponent implements OnInit {
   }
 
   onProductChange(): void {
-    this.productService.getProductById(this.newItem.productId).subscribe(product => {
-      if (product) {
-        this.newItem.productName = product.name;
-        this.newItem.unitPrice = product.price;
-        this.calculateItemTotal();
-      }
-    });
+    if (this.newItem.productId === 'manual') {
+      // Reset for manual entry
+      this.newItem.productName = '';
+      this.newItem.unitPrice = 0;
+      this.calculateItemTotal();
+    } else if (this.newItem.productId) {
+      this.productService.getProductById(this.newItem.productId).subscribe(product => {
+        if (product) {
+          this.newItem.productName = product.name;
+          this.newItem.unitPrice = product.price;
+          this.calculateItemTotal();
+        }
+      });
+    }
   }
 
   calculateItemTotal(): void {
