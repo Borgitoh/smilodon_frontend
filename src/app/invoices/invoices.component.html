@@ -1,6 +1,6 @@
 <div class="invoices-container">
-  <app-header 
-    title="Gestão de Faturas" 
+  <app-header
+    title="Gestão de Faturas"
     subtitle="Criar e gerir faturas dos clientes">
   </app-header>
 
@@ -16,14 +16,14 @@
         </span>
         <input type="text" placeholder="Pesquisar faturas..." class="search-input">
       </div>
-      
+
       <div class="filter-buttons">
         <button class="filter-btn active">Todas</button>
         <button class="filter-btn">Pagas</button>
         <button class="filter-btn">Pendentes</button>
         <button class="filter-btn">Vencidas</button>
       </div>
-      
+
       <button class="add-invoice-btn" (click)="toggleCreateForm()">
         <span class="btn-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -48,7 +48,7 @@
             </svg>
           </button>
         </div>
-        
+
         <div class="form-content">
           <!-- Client Selection -->
           <div class="form-section">
@@ -63,12 +63,12 @@
                   </option>
                 </select>
               </div>
-              
+
               <div class="form-group">
                 <label class="form-label">Data de Vencimento</label>
-                <input 
-                  type="date" 
-                  class="form-input" 
+                <input
+                  type="date"
+                  class="form-input"
                   [(ngModel)]="newInvoice.dueDate">
               </div>
             </div>
@@ -88,37 +88,37 @@
                     </option>
                   </select>
                 </div>
-                
+
                 <div class="form-group">
                   <label class="form-label">Quantidade</label>
-                  <input 
-                    type="number" 
-                    class="form-input" 
+                  <input
+                    type="number"
+                    class="form-input"
                     [(ngModel)]="newItem.quantity"
                     (ngModelChange)="calculateItemTotal()"
                     min="1">
                 </div>
-                
+
                 <div class="form-group">
                   <label class="form-label">Preço Unitário</label>
-                  <input 
-                    type="number" 
-                    class="form-input" 
+                  <input
+                    type="number"
+                    class="form-input"
                     [(ngModel)]="newItem.unitPrice"
                     (ngModelChange)="calculateItemTotal()"
                     step="0.01">
                 </div>
-                
+
                 <div class="form-group">
                   <label class="form-label">Total</label>
-                  <input 
-                    type="text" 
-                    class="form-input" 
+                  <input
+                    type="text"
+                    class="form-input"
                     [value]="formatCurrency(newItem.total)"
                     readonly>
                 </div>
               </div>
-              
+
               <button class="add-item-btn" (click)="addItem()" [disabled]="!newItem.productId">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
@@ -141,7 +141,7 @@
                 <div class="col-total">Total</div>
                 <div class="col-actions">Ações</div>
               </div>
-              
+
               <div class="table-row" *ngFor="let item of newInvoice.items; let i = index">
                 <div class="col-product">{{ item.productName }}</div>
                 <div class="col-qty">{{ item.quantity }}</div>
@@ -157,7 +157,7 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Invoice Totals -->
             <div class="invoice-totals">
               <div class="total-row">
@@ -175,7 +175,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="form-actions">
           <button class="cancel-btn" (click)="toggleCreateForm()">Cancelar</button>
           <button class="save-btn" (click)="createInvoice()" [disabled]="!newInvoice.clientId || newInvoice.items.length === 0">
@@ -199,7 +199,7 @@
             </span>
           </div>
         </div>
-        
+
         <div class="invoice-details">
           <div class="detail-row">
             <span class="detail-label">
@@ -213,7 +213,7 @@
             </span>
             <span class="detail-value">{{ formatDate(invoice.issueDate) }}</span>
           </div>
-          
+
           <div class="detail-row">
             <span class="detail-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -226,7 +226,7 @@
             </span>
             <span class="detail-value">{{ formatDate(invoice.dueDate) }}</span>
           </div>
-          
+
           <div class="detail-row">
             <span class="detail-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -239,7 +239,7 @@
             </span>
             <span class="detail-value">{{ invoice.items.length }} produtos</span>
           </div>
-          
+
           <div class="detail-row total-row">
             <span class="detail-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -251,7 +251,7 @@
             <span class="detail-value total-value">{{ formatCurrency(invoice.total) }}</span>
           </div>
         </div>
-        
+
         <div class="invoice-actions">
           <button class="action-btn view" (click)="viewInvoice(invoice)">
             <span class="btn-icon">
@@ -281,8 +281,8 @@
             </span>
             Imprimir
           </button>
-          <button 
-            class="action-btn paid" 
+          <button
+            class="action-btn paid"
             *ngIf="invoice.status !== 'paid'"
             (click)="markAsPaid(invoice.id)">
             <span class="btn-icon">
@@ -307,7 +307,7 @@
           <h1>Smilodon</h1>
           <p>Sistema de Faturação</p>
           <p>Luanda, Angola</p>
-          <p>info@smilodon.com</p>
+          <p>info&#64;smilodon.com</p>
         </div>
         <div class="invoice-info-print">
           <h2>FATURA</h2>
@@ -316,12 +316,12 @@
           <p><strong>Vencimento:</strong> {{ formatDate(selectedInvoice.dueDate) }}</p>
         </div>
       </div>
-      
+
       <div class="client-info-print">
         <h3>Faturar a:</h3>
         <p><strong>{{ selectedInvoice.clientName }}</strong></p>
       </div>
-      
+
       <div class="items-table-print">
         <table>
           <thead>
@@ -342,7 +342,7 @@
           </tbody>
         </table>
       </div>
-      
+
       <div class="totals-print">
         <div class="total-line">
           <span>Subtotal:</span>
@@ -358,7 +358,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="print-actions no-print">
       <button class="cancel-btn" (click)="closePrintModal()">Fechar</button>
       <button class="print-btn" (click)="window.print()">
