@@ -133,7 +133,7 @@ export class InvoicesComponent implements OnInit {
         clientId: this.newInvoice.clientId,
         type: 'debit',
         amount: this.newInvoice.total,
-        description: `Fatura - ${this.newInvoice.items.length} item(s)`,
+        description: `Fatura ${invoiceData.number} - ${this.newInvoice.items.length} item(s)`,
         invoiceId: invoiceData.id
       });
 
@@ -183,7 +183,7 @@ export class InvoicesComponent implements OnInit {
 
     pdf.setFontSize(10);
     pdf.setTextColor(107, 114, 128);
-    pdf.text(`Número: ${invoice.number}`, 150, 45);
+    pdf.text(`N��mero: ${invoice.number}`, 150, 45);
     pdf.text(`Data: ${this.formatDate(invoice.issueDate)}`, 150, 55);
     pdf.text(`Vencimento: ${this.formatDate(invoice.dueDate)}`, 150, 65);
 
