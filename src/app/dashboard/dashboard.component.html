@@ -1,14 +1,14 @@
 <div class="dashboard-container">
-  <app-header
-    title="Dashboard"
+  <app-header 
+    title="Dashboard" 
     subtitle="Visão geral do seu negócio">
   </app-header>
 
   <div class="dashboard-content">
     <!-- Stats Cards -->
     <div class="stats-grid" *ngIf="invoiceStats$ | async as stats">
-      <div class="stat-card revenue">
-        <div class="stat-icon">💰</div>
+      <div class="stat-card">
+        <div class="stat-icon revenue">💰</div>
         <div class="stat-info">
           <h3 class="stat-value">{{ formatCurrency(stats.totalRevenue) }}</h3>
           <p class="stat-label">Receita Total</p>
@@ -19,8 +19,8 @@
         </div>
       </div>
 
-      <div class="stat-card invoices">
-        <div class="stat-icon">📄</div>
+      <div class="stat-card">
+        <div class="stat-icon invoices">📄</div>
         <div class="stat-info">
           <h3 class="stat-value">{{ stats.totalInvoices }}</h3>
           <p class="stat-label">Total de Faturas</p>
@@ -31,8 +31,8 @@
         </div>
       </div>
 
-      <div class="stat-card clients">
-        <div class="stat-icon">👥</div>
+      <div class="stat-card">
+        <div class="stat-icon clients">👥</div>
         <div class="stat-info">
           <h3 class="stat-value">{{ totalClients }}</h3>
           <p class="stat-label">Clientes Ativos</p>
@@ -43,8 +43,8 @@
         </div>
       </div>
 
-      <div class="stat-card products">
-        <div class="stat-icon">📦</div>
+      <div class="stat-card">
+        <div class="stat-icon products">📦</div>
         <div class="stat-info">
           <h3 class="stat-value">{{ totalProducts }}</h3>
           <p class="stat-label">Produtos</p>
@@ -81,19 +81,19 @@
               <span class="legend-text">Vencidas ({{ stats.overdueInvoices }})</span>
             </div>
           </div>
-
+          
           <div class="simple-chart">
             <div class="chart-bar">
-              <div
-                class="bar-segment paid"
+              <div 
+                class="bar-segment paid" 
                 [style.width.%]="(stats.paidInvoices / stats.totalInvoices) * 100">
               </div>
-              <div
-                class="bar-segment pending"
+              <div 
+                class="bar-segment pending" 
                 [style.width.%]="(stats.pendingInvoices / stats.totalInvoices) * 100">
               </div>
-              <div
-                class="bar-segment overdue"
+              <div 
+                class="bar-segment overdue" 
                 [style.width.%]="(stats.overdueInvoices / stats.totalInvoices) * 100">
               </div>
             </div>
@@ -109,7 +109,7 @@
         </div>
         <div class="recent-list">
           <div class="recent-item" *ngFor="let client of (clients$ | async)?.slice(0, 5)">
-            <div class="item-avatar">👤</div>
+            <div class="item-avatar">{{ client.name.charAt(0) }}</div>
             <div class="item-info">
               <h4 class="item-name">{{ client.name }}</h4>
               <p class="item-detail">{{ client.email }}</p>
@@ -124,7 +124,7 @@
       </div>
 
       <!-- Quick Actions -->
-      <div class="dashboard-card actions-card">
+      <div class="dashboard-card">
         <div class="card-header">
           <h3 class="card-title">Ações Rápidas</h3>
         </div>

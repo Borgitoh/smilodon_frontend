@@ -1,14 +1,13 @@
 .page-header {
-  background: white;
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: var(--white);
+  padding: 2rem 2rem 1.5rem 2rem;
+  border-bottom: 1px solid var(--gray-100);
 }
 
 .header-content {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   max-width: 100%;
 }
 
@@ -19,17 +18,14 @@
 .page-title {
   font-size: 1.875rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--gray-900);
   margin: 0 0 0.25rem 0;
-  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: -0.02em;
 }
 
 .page-subtitle {
   font-size: 1rem;
-  color: #6b7280;
+  color: var(--gray-500);
   margin: 0;
   font-weight: 400;
 }
@@ -37,26 +33,27 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .date-info {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, #f9fafb, #f3f4f6);
-  border-radius: 0.75rem;
-  border: 1px solid #e5e7eb;
+  padding: 0.5rem 1rem;
+  background: var(--gray-50);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--gray-200);
 }
 
 .date-label {
-  font-size: 1.125rem;
+  font-size: 1rem;
+  color: var(--gray-500);
 }
 
 .date-text {
-  font-size: 0.875rem;
-  color: #374151;
+  font-size: 0.8rem;
+  color: var(--gray-600);
   font-weight: 500;
   text-transform: capitalize;
 }
@@ -67,49 +64,47 @@
 
 .notification-btn {
   position: relative;
-  background: linear-gradient(135deg, #f59e0b, #fbbf24);
-  border: none;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  transition: all 0.2s ease;
   
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+    background: var(--gray-200);
   }
 }
 
 .notification-icon {
-  font-size: 1.25rem;
-  color: white;
+  font-size: 1rem;
+  color: var(--gray-600);
 }
 
 .notification-badge {
   position: absolute;
   top: -2px;
   right: -2px;
-  background: #ef4444;
-  color: white;
-  font-size: 0.75rem;
+  background: var(--error);
+  color: var(--white);
+  font-size: 0.7rem;
   font-weight: 600;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid white;
+  border: 2px solid var(--white);
 }
 
 @media (max-width: 768px) {
   .page-header {
-    padding: 1rem 1.5rem;
+    padding: 1.5rem 1rem;
   }
   
   .header-content {
@@ -125,10 +120,5 @@
   .header-actions {
     width: 100%;
     justify-content: space-between;
-  }
-  
-  .date-info {
-    flex: 1;
-    justify-content: center;
   }
 }

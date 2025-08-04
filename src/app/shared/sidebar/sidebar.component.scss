@@ -1,20 +1,19 @@
 .sidebar {
-  width: 280px;
+  width: 260px;
   height: 100vh;
-  background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
-  color: white;
+  background: var(--white);
+  border-right: 1px solid var(--gray-200);
   display: flex;
   flex-direction: column;
   position: fixed;
   left: 0;
   top: 0;
   z-index: 1000;
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-header {
-  padding: 2rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  border-bottom: 1px solid var(--gray-100);
 }
 
 .logo {
@@ -25,33 +24,34 @@
 }
 
 .logo-icon {
-  font-size: 2rem;
-  background: linear-gradient(135deg, #f59e0b, #fbbf24);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  width: 36px;
+  height: 36px;
+  background: var(--primary-blue);
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--white);
 }
 
 .logo-text {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
+  color: var(--gray-900);
   margin: 0;
-  background: linear-gradient(135deg, #ffffff, #e5e7eb);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .subtitle {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  color: var(--gray-500);
   margin: 0;
   font-weight: 400;
 }
 
 .sidebar-nav {
   flex: 1;
-  padding: 1.5rem 0;
+  padding: 1rem 0;
 }
 
 .nav-list {
@@ -61,52 +61,56 @@
 }
 
 .nav-item {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .nav-link {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  color: rgba(255, 255, 255, 0.8);
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  color: var(--gray-600);
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   cursor: pointer;
-  border-left: 3px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0;
+  margin: 0 0.75rem;
+  border-radius: var(--border-radius-sm);
   
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border-left-color: #f59e0b;
+    background: var(--gray-50);
+    color: var(--gray-900);
   }
   
   &.active {
-    background: rgba(245, 158, 11, 0.2);
-    color: white;
-    border-left-color: #f59e0b;
+    background: var(--primary-blue);
+    color: var(--white);
     
     .nav-icon {
-      transform: scale(1.1);
+      opacity: 1;
     }
   }
 }
 
 .nav-icon {
-  font-size: 1.25rem;
-  width: 24px;
-  text-align: center;
-  transition: transform 0.3s ease;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  opacity: 0.8;
 }
 
 .nav-label {
   font-weight: 500;
-  font-size: 0.95rem;
 }
 
 .sidebar-footer {
   padding: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--gray-100);
 }
 
 .user-info {
@@ -116,15 +120,15 @@
 }
 
 .user-avatar {
-  width: 40px;
-  height: 40px;
-  background: rgba(245, 158, 11, 0.2);
+  width: 36px;
+  height: 36px;
+  background: var(--gray-100);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
-  border: 2px solid #f59e0b;
+  font-size: 1rem;
+  color: var(--gray-600);
 }
 
 .user-details {
@@ -134,35 +138,24 @@
 .user-name {
   font-weight: 600;
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  color: var(--gray-900);
 }
 
 .user-role {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  color: var(--gray-500);
   margin: 0;
 }
 
 @media (max-width: 768px) {
   .sidebar {
-    width: 250px;
+    width: 240px;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
     
     &.open {
       transform: translateX(0);
     }
-  }
-  
-  .sidebar-header {
-    padding: 1.5rem 1rem;
-  }
-  
-  .nav-link {
-    padding: 0.875rem 1rem;
-  }
-  
-  .sidebar-footer {
-    padding: 1rem;
   }
 }
