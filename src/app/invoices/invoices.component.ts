@@ -64,12 +64,7 @@ export class InvoicesComponent implements OnInit {
         // If amount and description are provided (from debit transaction), pre-fill
         if (params['amount'] && params['description']) {
           // This indicates we're creating an invoice from a debit transaction
-          // We'll need to add this as a manual item
-          this.newItem.productName = params['description'];
-          this.newItem.unitPrice = parseFloat(params['amount']);
-          this.newItem.quantity = 1;
-          this.calculateItemTotal();
-          this.addItem();
+          this.addManualItem(params['description'], parseFloat(params['amount']));
         }
       }
     });
@@ -307,6 +302,19 @@ export class InvoicesComponent implements OnInit {
       unitPrice: 0,
       total: 0
     };
+  }
+
+  private addManualItem(description: string, amount: number): void {
+    const manualItem: InvoiceItem = {
+      productId: 'manual-' + Date.now(),
+      productName: description,
+      quantity: 1,
+      unitPrice: amount,
+      total: amount
+    };
+
+    this.newInvoice.items.push(manualItem);
+    this.calculateInvoiceTotal();
   }
 
   formatCurrency(amount: number): string {
