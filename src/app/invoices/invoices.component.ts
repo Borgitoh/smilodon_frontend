@@ -125,16 +125,16 @@ export class InvoicesComponent implements OnInit {
 
   createInvoice(): void {
     if (this.newInvoice.clientId && this.newInvoice.items.length > 0) {
-      // Create the invoice first
-      const invoiceId = this.invoiceService.createInvoice(this.newInvoice);
+      // Create the invoice first and get the invoice data
+      const invoiceData = this.invoiceService.createInvoice(this.newInvoice);
 
       // Create a corresponding debit transaction for the client
       this.clientService.addTransaction({
         clientId: this.newInvoice.clientId,
         type: 'debit',
         amount: this.newInvoice.total,
-        description: `Fatura ${this.newInvoice.number || 'Nova'} - ${this.newInvoice.items.length} item(s)`,
-        invoiceId: invoiceId
+        description: `Fatura - ${this.newInvoice.items.length} item(s)`,
+        invoiceId: invoiceData.id
       });
 
       this.toggleCreateForm();
