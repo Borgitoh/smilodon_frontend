@@ -8,6 +8,9 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientsComponent } from './clients/clients.component';
+import { ProductsComponent } from './products/products.component';
+import { InvoicesComponent } from './invoices/invoices.component';
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +18,10 @@ import { ClientsComponent } from './clients/clients.component';
     SidebarComponent,
     HeaderComponent,
     DashboardComponent,
-    ClientsComponent
+    ClientsComponent,
+    ProductsComponent,
+    InvoicesComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,
