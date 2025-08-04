@@ -36,6 +36,155 @@
       </button>
     </div>
 
+    <!-- Create Invoice Form -->
+    <div class="create-form-container" *ngIf="showCreateForm">
+      <div class="create-form">
+        <div class="form-header">
+          <h3 class="form-title">Criar Nova Fatura</h3>
+          <button class="close-btn" (click)="toggleCreateForm()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="form-content">
+          <!-- Client Selection -->
+          <div class="form-section">
+            <h4 class="section-title">Informações do Cliente</h4>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Cliente</label>
+                <select class="form-input" [(ngModel)]="newInvoice.clientId" (change)="onClientChange()">
+                  <option value="">Selecionar cliente</option>
+                  <option *ngFor="let client of clients$ | async" [value]="client.id">
+                    {{ client.name }}
+                  </option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Data de Vencimento</label>
+                <input 
+                  type="date" 
+                  class="form-input" 
+                  [(ngModel)]="newInvoice.dueDate">
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Items -->
+          <div class="form-section">
+            <h4 class="section-title">Adicionar Item</h4>
+            <div class="item-form">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Produto</label>
+                  <select class="form-input" [(ngModel)]="newItem.productId" (change)="onProductChange()">
+                    <option value="">Selecionar produto</option>
+                    <option *ngFor="let product of products$ | async" [value]="product.id">
+                      {{ product.name }} - {{ formatCurrency(product.price) }}
+                    </option>
+                  </select>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Quantidade</label>
+                  <input 
+                    type="number" 
+                    class="form-input" 
+                    [(ngModel)]="newItem.quantity"
+                    (ngModelChange)="calculateItemTotal()"
+                    min="1">
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Preço Unitário</label>
+                  <input 
+                    type="number" 
+                    class="form-input" 
+                    [(ngModel)]="newItem.unitPrice"
+                    (ngModelChange)="calculateItemTotal()"
+                    step="0.01">
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Total</label>
+                  <input 
+                    type="text" 
+                    class="form-input" 
+                    [value]="formatCurrency(newItem.total)"
+                    readonly>
+                </div>
+              </div>
+              
+              <button class="add-item-btn" (click)="addItem()" [disabled]="!newItem.productId">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="16"/>
+                  <line x1="8" y1="12" x2="16" y2="12"/>
+                </svg>
+                Adicionar Item
+              </button>
+            </div>
+          </div>
+
+          <!-- Items List -->
+          <div class="form-section" *ngIf="newInvoice.items.length > 0">
+            <h4 class="section-title">Itens da Fatura</h4>
+            <div class="items-table">
+              <div class="table-header">
+                <div class="col-product">Produto</div>
+                <div class="col-qty">Qtd</div>
+                <div class="col-price">Preço Unit.</div>
+                <div class="col-total">Total</div>
+                <div class="col-actions">Ações</div>
+              </div>
+              
+              <div class="table-row" *ngFor="let item of newInvoice.items; let i = index">
+                <div class="col-product">{{ item.productName }}</div>
+                <div class="col-qty">{{ item.quantity }}</div>
+                <div class="col-price">{{ formatCurrency(item.unitPrice) }}</div>
+                <div class="col-total">{{ formatCurrency(item.total) }}</div>
+                <div class="col-actions">
+                  <button class="remove-btn" (click)="removeItem(i)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3,6 5,6 21,6"/>
+                      <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Invoice Totals -->
+            <div class="invoice-totals">
+              <div class="total-row">
+                <span class="total-label">Subtotal:</span>
+                <span class="total-value">{{ formatCurrency(newInvoice.subtotal) }}</span>
+              </div>
+              <div class="total-row">
+                <span class="total-label">IVA (18%):</span>
+                <span class="total-value">{{ formatCurrency(newInvoice.tax) }}</span>
+              </div>
+              <div class="total-row final">
+                <span class="total-label">Total:</span>
+                <span class="total-value">{{ formatCurrency(newInvoice.total) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button class="cancel-btn" (click)="toggleCreateForm()">Cancelar</button>
+          <button class="save-btn" (click)="createInvoice()" [disabled]="!newInvoice.clientId || newInvoice.items.length === 0">
+            Criar Fatura
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Invoices List -->
     <div class="invoices-list">
       <div class="invoice-card" *ngFor="let invoice of invoices$ | async">
@@ -122,7 +271,7 @@
             </span>
             Editar
           </button>
-          <button class="action-btn print">
+          <button class="action-btn print" (click)="printInvoice(invoice)">
             <span class="btn-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="6,9 6,2 18,2 18,9"/>
@@ -145,6 +294,81 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Print Modal -->
+<div class="print-modal" *ngIf="showPrintModal && selectedInvoice" (click)="closePrintModal()">
+  <div class="print-content" (click)="$event.stopPropagation()">
+    <div class="invoice-print">
+      <div class="invoice-header-print">
+        <div class="company-info">
+          <h1>Smilodon</h1>
+          <p>Sistema de Faturação</p>
+          <p>Luanda, Angola</p>
+          <p>info@smilodon.com</p>
+        </div>
+        <div class="invoice-info-print">
+          <h2>FATURA</h2>
+          <p><strong>Número:</strong> {{ selectedInvoice.number }}</p>
+          <p><strong>Data:</strong> {{ formatDate(selectedInvoice.issueDate) }}</p>
+          <p><strong>Vencimento:</strong> {{ formatDate(selectedInvoice.dueDate) }}</p>
+        </div>
+      </div>
+      
+      <div class="client-info-print">
+        <h3>Faturar a:</h3>
+        <p><strong>{{ selectedInvoice.clientName }}</strong></p>
+      </div>
+      
+      <div class="items-table-print">
+        <table>
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Qtd</th>
+              <th>Preço Unit.</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of selectedInvoice.items">
+              <td>{{ item.productName }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ formatCurrency(item.unitPrice) }}</td>
+              <td>{{ formatCurrency(item.total) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="totals-print">
+        <div class="total-line">
+          <span>Subtotal:</span>
+          <span>{{ formatCurrency(selectedInvoice.subtotal) }}</span>
+        </div>
+        <div class="total-line">
+          <span>IVA (18%):</span>
+          <span>{{ formatCurrency(selectedInvoice.tax) }}</span>
+        </div>
+        <div class="total-line final">
+          <span><strong>Total:</strong></span>
+          <span><strong>{{ formatCurrency(selectedInvoice.total) }}</strong></span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="print-actions no-print">
+      <button class="cancel-btn" (click)="closePrintModal()">Fechar</button>
+      <button class="print-btn" (click)="window.print()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6,9 6,2 18,2 18,9"/>
+          <path d="M6,18H4a2,2,0,0,1-2-2V11a2,2,0,0,1,2-2H20a2,2,0,0,1,2,2v5a2,2,0,0,1-2,2H18"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        Imprimir
+      </button>
     </div>
   </div>
 </div>
