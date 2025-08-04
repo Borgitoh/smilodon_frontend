@@ -105,7 +105,12 @@ export class InvoicesComponent implements OnInit {
   }
 
   addItem(): void {
-    if (this.newItem.productId && this.newItem.quantity > 0) {
+    if ((this.newItem.productId || this.newItem.productName) && this.newItem.quantity > 0 && this.newItem.unitPrice > 0) {
+      // If no productId but we have a name and price, create manual item
+      if (!this.newItem.productId && this.newItem.productName) {
+        this.newItem.productId = 'manual-' + Date.now();
+      }
+
       this.newInvoice.items.push({ ...this.newItem });
       this.calculateInvoiceTotal();
       this.resetItem();
@@ -183,7 +188,7 @@ export class InvoicesComponent implements OnInit {
 
     pdf.setFontSize(10);
     pdf.setTextColor(107, 114, 128);
-    pdf.text(`N��mero: ${invoice.number}`, 150, 45);
+    pdf.text(`Número: ${invoice.number}`, 150, 45);
     pdf.text(`Data: ${this.formatDate(invoice.issueDate)}`, 150, 55);
     pdf.text(`Vencimento: ${this.formatDate(invoice.dueDate)}`, 150, 65);
 
