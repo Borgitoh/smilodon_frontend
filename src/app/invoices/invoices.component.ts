@@ -107,13 +107,20 @@ export class InvoicesComponent implements OnInit {
   }
 
   addItem(): void {
-    if ((this.newItem.productId || this.newItem.productName) && this.newItem.quantity > 0 && this.newItem.unitPrice > 0) {
-      // If no productId but we have a name and price, create manual item
-      if (!this.newItem.productId && this.newItem.productName) {
-        this.newItem.productId = 'manual-' + Date.now();
+    if (this.newItem.quantity > 0 && this.newItem.unitPrice > 0) {
+      const itemToAdd = { ...this.newItem };
+
+      // Handle manual items
+      if (this.newItem.productId === 'manual') {
+        if (!this.newItem.productName.trim()) {
+          return; // Don't add if no description
+        }
+        itemToAdd.productId = 'manual-' + Date.now();
+      } else if (!this.newItem.productId) {
+        return; // Don't add if no product selected
       }
 
-      this.newInvoice.items.push({ ...this.newItem });
+      this.newInvoice.items.push(itemToAdd);
       this.calculateInvoiceTotal();
       this.resetItem();
     }
