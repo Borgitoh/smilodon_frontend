@@ -78,7 +78,7 @@ export class InvoiceService {
     return new BehaviorSubject(this.invoicesSubject.value.find(i => i.id === id)).asObservable();
   }
 
-  createInvoice(invoice: Omit<Invoice, 'id' | 'number'>): string {
+  createInvoice(invoice: Omit<Invoice, 'id' | 'number'>): Invoice {
     const invoiceCount = this.invoicesSubject.value.length + 1;
     const newInvoice: Invoice = {
       ...invoice,
@@ -89,7 +89,7 @@ export class InvoiceService {
     const currentInvoices = this.invoicesSubject.value;
     this.invoicesSubject.next([...currentInvoices, newInvoice]);
 
-    return newInvoice.id;
+    return newInvoice;
   }
 
   updateInvoice(id: string, updates: Partial<Invoice>): void {
