@@ -94,7 +94,7 @@
       <div class="client-card" *ngFor="let client of clients$ | async">
         <div class="client-header">
           <div class="client-avatar">
-            <span class="avatar-text">{{ client.name.charAt(0).toUpperCase() }}</span>
+            {{ client.name.charAt(0).toUpperCase() }}
           </div>
           <div class="client-info">
             <h3 class="client-name">{{ client.name }}</h3>
