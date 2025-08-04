@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 import { ClientService } from '../services/client.service';
+import { InvoiceService } from '../services/invoice.service';
 import { Client, ClientTransaction } from '../models/client.model';
 
 @Component({
@@ -13,7 +15,7 @@ export class ClientsComponent implements OnInit {
   showAddForm = false;
   showTransactionModal = false;
   selectedClient: Client | null = null;
-  
+
   newClient = {
     name: '',
     email: '',
@@ -24,14 +26,18 @@ export class ClientsComponent implements OnInit {
     creditLimit: 50000,
     invoices: []
   };
-  
+
   newTransaction = {
     type: 'credit' as 'credit' | 'debit',
     amount: 0,
     description: ''
   };
 
-  constructor(private clientService: ClientService) {}
+  constructor(
+    private clientService: ClientService,
+    private invoiceService: InvoiceService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.clients$ = this.clientService.getClients();
@@ -68,19 +74,43 @@ export class ClientsComponent implements OnInit {
 
   addTransaction(): void {
     if (this.selectedClient && this.newTransaction.amount > 0) {
-      this.clientService.addTransaction({
+      // If it's a debit transaction, check if it needs to be linked to an invoice
+      let transactionData: any = {
         clientId: this.selectedClient.id,
         type: this.newTransaction.type,
         amount: this.newTransaction.amount,
         description: this.newTransaction.description
-      });
+      };
+
+      // For debit transactions, create an invoice automatically
+      if (this.newTransaction.type === 'debit') {
+        // Navigate to invoice creation with pre-selected client
+        this.router.navigate(['/invoices'], {
+          queryParams: {
+            clientId: this.selectedClient.id,
+            amount: this.newTransaction.amount,
+            description: this.newTransaction.description
+          }
+        });
+        this.closeTransactionModal();
+        return;
+      }
+
+      this.clientService.addTransaction(transactionData);
       this.closeTransactionModal();
     }
   }
 
+  createInvoiceForClient(client: Client): void {
+    // Navigate to invoices with pre-selected client
+    this.router.navigate(['/invoices'], {
+      queryParams: { clientId: client.id }
+    });
+  }
+
   private isFormValid(): boolean {
-    return this.newClient.name.trim() !== '' && 
-           this.newClient.email.trim() !== '' && 
+    return this.newClient.name.trim() !== '' &&
+           this.newClient.email.trim() !== '' &&
            this.newClient.phone.trim() !== '';
   }
 
