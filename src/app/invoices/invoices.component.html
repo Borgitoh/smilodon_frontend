@@ -1,6 +1,6 @@
 <div class="invoices-container">
-  <app-header 
-    title="Gestão de Faturas" 
+  <app-header
+    title="Gestão de Faturas"
     subtitle="Criar e gerir faturas dos clientes">
   </app-header>
 
@@ -16,14 +16,14 @@
         </span>
         <input type="text" placeholder="Pesquisar faturas..." class="search-input">
       </div>
-      
+
       <div class="filter-buttons">
         <button class="filter-btn active">Todas</button>
         <button class="filter-btn">Pagas</button>
         <button class="filter-btn">Pendentes</button>
         <button class="filter-btn">Vencidas</button>
       </div>
-      
+
       <button class="add-invoice-btn" (click)="toggleCreateForm()">
         <span class="btn-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -50,7 +50,7 @@
             </span>
           </div>
         </div>
-        
+
         <div class="invoice-details">
           <div class="detail-row">
             <span class="detail-label">
@@ -64,7 +64,7 @@
             </span>
             <span class="detail-value">{{ formatDate(invoice.issueDate) }}</span>
           </div>
-          
+
           <div class="detail-row">
             <span class="detail-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -77,7 +77,7 @@
             </span>
             <span class="detail-value">{{ formatDate(invoice.dueDate) }}</span>
           </div>
-          
+
           <div class="detail-row">
             <span class="detail-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -90,7 +90,7 @@
             </span>
             <span class="detail-value">{{ invoice.items.length }} produtos</span>
           </div>
-          
+
           <div class="detail-row total-row">
             <span class="detail-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -102,7 +102,7 @@
             <span class="detail-value total-value">{{ formatCurrency(invoice.total) }}</span>
           </div>
         </div>
-        
+
         <div class="invoice-actions">
           <button class="action-btn view" (click)="viewInvoice(invoice)">
             <span class="btn-icon">
@@ -132,8 +132,18 @@
             </span>
             Imprimir
           </button>
-          <button 
-            class="action-btn paid" 
+          <button class="action-btn download" (click)="downloadInvoicePDF(invoice)">
+            <span class="btn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7,10 12,15 17,10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </span>
+            Baixar PDF
+          </button>
+          <button
+            class="action-btn paid"
             *ngIf="invoice.status !== 'paid'"
             (click)="markAsPaid(invoice.id)">
             <span class="btn-icon">
@@ -174,7 +184,7 @@
         </svg>
       </button>
     </div>
-    
+
     <div class="modal-body">
       <div class="progress-bar">
         <div class="progress-step active" [class.completed]="newInvoice.clientId">
@@ -199,7 +209,7 @@
           <h3 class="step-title">Informações do Cliente</h3>
           <p class="step-description">Selecione o cliente para esta fatura</p>
         </div>
-        
+
         <div class="form-grid">
           <div class="form-group span-2">
             <label class="form-label">
@@ -218,7 +228,7 @@
               </select>
             </div>
           </div>
-          
+
           <div class="form-group">
             <label class="form-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -229,9 +239,9 @@
               </svg>
               Data de Vencimento
             </label>
-            <input 
-              type="date" 
-              class="form-input" 
+            <input
+              type="date"
+              class="form-input"
               [(ngModel)]="newInvoice.dueDate">
           </div>
         </div>
@@ -243,7 +253,7 @@
           <h3 class="step-title">Adicionar Produtos</h3>
           <p class="step-description">Selecione os produtos para incluir na fatura</p>
         </div>
-        
+
         <div class="product-selector">
           <div class="selector-card">
             <div class="selector-header">
@@ -256,7 +266,7 @@
               </div>
               <h4 class="selector-title">Novo Item</h4>
             </div>
-            
+
             <div class="selector-form">
               <div class="form-row">
                 <div class="form-group">
@@ -270,27 +280,27 @@
                     </select>
                   </div>
                 </div>
-                
+
                 <div class="form-group">
                   <label class="form-label">Quantidade</label>
-                  <input 
-                    type="number" 
-                    class="form-input" 
+                  <input
+                    type="number"
+                    class="form-input"
                     [(ngModel)]="newItem.quantity"
                     (ngModelChange)="calculateItemTotal()"
                     min="1">
                 </div>
-                
+
                 <div class="form-group">
                   <label class="form-label">Preço Unit.</label>
-                  <input 
-                    type="number" 
-                    class="form-input" 
+                  <input
+                    type="number"
+                    class="form-input"
                     [(ngModel)]="newItem.unitPrice"
                     (ngModelChange)="calculateItemTotal()"
                     step="0.01">
                 </div>
-                
+
                 <div class="form-group">
                   <label class="form-label">Total</label>
                   <div class="total-display">
@@ -298,7 +308,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <button class="add-item-btn" (click)="addItem()" [disabled]="!newItem.productId">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
@@ -314,7 +324,7 @@
         <!-- Items List -->
         <div class="items-section" *ngIf="newInvoice.items.length > 0">
           <h4 class="items-title">Itens da Fatura ({{ newInvoice.items.length }})</h4>
-          
+
           <div class="items-list">
             <div class="item-card" *ngFor="let item of newInvoice.items; let i = index">
               <div class="item-info">
@@ -332,7 +342,7 @@
               </button>
             </div>
           </div>
-          
+
           <!-- Invoice Summary -->
           <div class="invoice-summary">
             <div class="summary-card">
@@ -353,7 +363,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="modal-footer">
       <button class="btn-secondary" (click)="toggleCreateForm()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -362,8 +372,8 @@
         </svg>
         Cancelar
       </button>
-      <button class="btn-primary" 
-              (click)="createInvoice()" 
+      <button class="btn-primary"
+              (click)="createInvoice()"
               [disabled]="!newInvoice.clientId || newInvoice.items.length === 0">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="20,6 9,17 4,12"/>
@@ -392,12 +402,12 @@
           <p><strong>Vencimento:</strong> {{ formatDate(selectedInvoice.dueDate) }}</p>
         </div>
       </div>
-      
+
       <div class="client-info-print">
         <h3>Faturar a:</h3>
         <p><strong>{{ selectedInvoice.clientName }}</strong></p>
       </div>
-      
+
       <div class="items-table-print">
         <table>
           <thead>
@@ -418,7 +428,7 @@
           </tbody>
         </table>
       </div>
-      
+
       <div class="totals-print">
         <div class="total-line">
           <span>Subtotal:</span>
@@ -434,7 +444,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="print-actions no-print">
       <button class="cancel-btn" (click)="closePrintModal()">Fechar</button>
       <button class="print-btn" (click)="printDocument()">

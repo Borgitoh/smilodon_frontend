@@ -6,6 +6,7 @@ import { ProductService } from '../services/product.service';
 import { Invoice, InvoiceItem } from '../models/invoice.model';
 import { Client } from '../models/client.model';
 import { Product } from '../models/product.model';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-invoices',
@@ -123,6 +124,117 @@ export class InvoicesComponent implements OnInit {
 
   printDocument(): void {
     window.print();
+  }
+
+  downloadInvoicePDF(invoice: Invoice): void {
+    const pdf = new jsPDF();
+
+    // Set font
+    pdf.setFont('helvetica');
+
+    // Company header
+    pdf.setFontSize(24);
+    pdf.setTextColor(30, 58, 138); // Primary blue
+    pdf.text('SMILODON', 20, 30);
+
+    pdf.setFontSize(12);
+    pdf.setTextColor(107, 114, 128); // Gray
+    pdf.text('Sistema de Faturação', 20, 40);
+    pdf.text('Luanda, Angola', 20, 50);
+    pdf.text('info@smilodon.com', 20, 60);
+
+    // Invoice header
+    pdf.setFontSize(20);
+    pdf.setTextColor(31, 41, 55); // Dark gray
+    pdf.text('FATURA', 150, 30);
+
+    pdf.setFontSize(10);
+    pdf.setTextColor(107, 114, 128);
+    pdf.text(`Número: ${invoice.number}`, 150, 45);
+    pdf.text(`Data: ${this.formatDate(invoice.issueDate)}`, 150, 55);
+    pdf.text(`Vencimento: ${this.formatDate(invoice.dueDate)}`, 150, 65);
+
+    // Line separator
+    pdf.setDrawColor(226, 232, 240);
+    pdf.line(20, 75, 190, 75);
+
+    // Client info
+    pdf.setFontSize(12);
+    pdf.setTextColor(31, 41, 55);
+    pdf.text('Faturar a:', 20, 90);
+
+    pdf.setFontSize(11);
+    pdf.setTextColor(75, 85, 99);
+    pdf.text(invoice.clientName, 20, 100);
+
+    // Items table header
+    let yPosition = 120;
+    pdf.setFontSize(10);
+    pdf.setTextColor(31, 41, 55);
+    pdf.setFillColor(248, 250, 252);
+    pdf.rect(20, yPosition - 5, 170, 10, 'F');
+
+    pdf.text('Produto', 25, yPosition);
+    pdf.text('Qtd', 110, yPosition);
+    pdf.text('Preço Unit.', 130, yPosition);
+    pdf.text('Total', 165, yPosition);
+
+    // Items
+    yPosition += 15;
+    pdf.setTextColor(75, 85, 99);
+
+    invoice.items.forEach((item, index) => {
+      if (yPosition > 250) {
+        pdf.addPage();
+        yPosition = 30;
+      }
+
+      pdf.text(item.productName, 25, yPosition);
+      pdf.text(item.quantity.toString(), 110, yPosition);
+      pdf.text(this.formatCurrencyForPDF(item.unitPrice), 130, yPosition);
+      pdf.text(this.formatCurrencyForPDF(item.total), 165, yPosition);
+
+      yPosition += 10;
+    });
+
+    // Totals
+    yPosition += 10;
+    pdf.setDrawColor(226, 232, 240);
+    pdf.line(120, yPosition, 190, yPosition);
+
+    yPosition += 15;
+    pdf.setFontSize(10);
+    pdf.text('Subtotal:', 130, yPosition);
+    pdf.text(this.formatCurrencyForPDF(invoice.subtotal), 165, yPosition);
+
+    yPosition += 10;
+    pdf.text('IVA (18%):', 130, yPosition);
+    pdf.text(this.formatCurrencyForPDF(invoice.tax), 165, yPosition);
+
+    yPosition += 10;
+    pdf.setDrawColor(31, 41, 55);
+    pdf.line(120, yPosition, 190, yPosition);
+
+    yPosition += 15;
+    pdf.setFontSize(12);
+    pdf.setTextColor(31, 41, 55);
+    pdf.text('Total:', 130, yPosition);
+    pdf.text(this.formatCurrencyForPDF(invoice.total), 165, yPosition);
+
+    // Footer
+    pdf.setFontSize(8);
+    pdf.setTextColor(107, 114, 128);
+    pdf.text('Obrigado pela preferência!', 20, yPosition + 30);
+
+    // Save the PDF
+    pdf.save(`Fatura_${invoice.number}.pdf`);
+  }
+
+  private formatCurrencyForPDF(amount: number): string {
+    return new Intl.NumberFormat('pt-AO', {
+      style: 'currency',
+      currency: 'AOA'
+    }).format(amount);
   }
 
   closePrintModal(): void {
