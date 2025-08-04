@@ -19,7 +19,7 @@ export class InvoicesComponent implements OnInit {
   showCreateForm = false;
   selectedInvoice: Invoice | null = null;
   showPrintModal = false;
-  
+
   newInvoice = {
     clientId: '',
     clientName: '',
@@ -31,7 +31,7 @@ export class InvoicesComponent implements OnInit {
     issueDate: new Date(),
     dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
   };
-  
+
   newItem = {
     productId: '',
     productName: '',
@@ -114,11 +114,15 @@ export class InvoicesComponent implements OnInit {
   printInvoice(invoice: Invoice): void {
     this.selectedInvoice = invoice;
     this.showPrintModal = true;
-    
+
     // Wait for modal to render then print
     setTimeout(() => {
       window.print();
     }, 100);
+  }
+
+  printDocument(): void {
+    window.print();
   }
 
   closePrintModal(): void {
