@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { InvoiceService } from '../services/invoice.service';
 import { ClientService } from '../services/client.service';
@@ -44,13 +45,34 @@ export class InvoicesComponent implements OnInit {
   constructor(
     private invoiceService: InvoiceService,
     private clientService: ClientService,
-    private productService: ProductService
+    private productService: ProductService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.invoices$ = this.invoiceService.getInvoices();
     this.clients$ = this.clientService.getClients();
     this.products$ = this.productService.getProducts();
+
+    // Check for query parameters to pre-select client
+    this.route.queryParams.subscribe(params => {
+      if (params['clientId']) {
+        this.newInvoice.clientId = params['clientId'];
+        this.onClientChange();
+        this.showCreateForm = true;
+
+        // If amount and description are provided (from debit transaction), pre-fill
+        if (params['amount'] && params['description']) {
+          // This indicates we're creating an invoice from a debit transaction
+          // We'll need to add this as a manual item
+          this.newItem.productName = params['description'];
+          this.newItem.unitPrice = parseFloat(params['amount']);
+          this.newItem.quantity = 1;
+          this.calculateItemTotal();
+          this.addItem();
+        }
+      }
+    });
   }
 
   toggleCreateForm(): void {
