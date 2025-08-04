@@ -274,6 +274,7 @@
                   <div class="select-wrapper">
                     <select class="form-select" [(ngModel)]="newItem.productId" (change)="onProductChange()">
                       <option value="">Selecionar produto</option>
+                      <option value="manual">Item Manual</option>
                       <option *ngFor="let product of products$ | async" [value]="product.id">
                         {{ product.name }} - {{ formatCurrency(product.price) }}
                       </option>
