@@ -78,16 +78,18 @@ export class InvoiceService {
     return new BehaviorSubject(this.invoicesSubject.value.find(i => i.id === id)).asObservable();
   }
 
-  createInvoice(invoice: Omit<Invoice, 'id' | 'number'>): void {
+  createInvoice(invoice: Omit<Invoice, 'id' | 'number'>): string {
     const invoiceCount = this.invoicesSubject.value.length + 1;
     const newInvoice: Invoice = {
       ...invoice,
       id: Date.now().toString(),
       number: `SMD-${invoiceCount.toString().padStart(3, '0')}`
     };
-    
+
     const currentInvoices = this.invoicesSubject.value;
     this.invoicesSubject.next([...currentInvoices, newInvoice]);
+
+    return newInvoice.id;
   }
 
   updateInvoice(id: string, updates: Partial<Invoice>): void {
@@ -107,14 +109,14 @@ export class InvoiceService {
       pendingInvoices: invoices.filter(i => i.status === 'sent').length,
       overdueInvoices: invoices.filter(i => i.status === 'overdue').length
     };
-    
+
     return new BehaviorSubject(stats).asObservable();
   }
 
   markAsPaid(id: string): void {
-    this.updateInvoice(id, { 
-      status: 'paid', 
-      paidDate: new Date() 
+    this.updateInvoice(id, {
+      status: 'paid',
+      paidDate: new Date()
     });
   }
 }
