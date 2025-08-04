@@ -1,6 +1,6 @@
 <div class="dashboard-container">
-  <app-header 
-    title="Dashboard" 
+  <app-header
+    title="Dashboard"
     subtitle="Visão geral do seu negócio">
   </app-header>
 
@@ -81,19 +81,19 @@
               <span class="legend-text">Vencidas ({{ stats.overdueInvoices }})</span>
             </div>
           </div>
-          
+
           <div class="simple-chart">
             <div class="chart-bar">
-              <div 
-                class="bar-segment paid" 
+              <div
+                class="bar-segment paid"
                 [style.width.%]="(stats.paidInvoices / stats.totalInvoices) * 100">
               </div>
-              <div 
-                class="bar-segment pending" 
+              <div
+                class="bar-segment pending"
                 [style.width.%]="(stats.pendingInvoices / stats.totalInvoices) * 100">
               </div>
-              <div 
-                class="bar-segment overdue" 
+              <div
+                class="bar-segment overdue"
                 [style.width.%]="(stats.overdueInvoices / stats.totalInvoices) * 100">
               </div>
             </div>
@@ -116,7 +116,7 @@
             </div>
             <div class="item-status">
               <span class="balance" [class.negative]="client.balance > 0">
-                {{ formatCurrency(Math.abs(client.balance)) }}
+                {{ formatCurrency(getAbsoluteValue(client.balance)) }}
               </span>
             </div>
           </div>

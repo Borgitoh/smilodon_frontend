@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
   invoiceStats$!: Observable<InvoiceStats>;
   clients$!: Observable<Client[]>;
   products$!: Observable<Product[]>;
-  
+
   totalClients = 0;
   totalProducts = 0;
   lowStockProducts = 0;
@@ -47,5 +47,9 @@ export class DashboardComponent implements OnInit {
       style: 'currency',
       currency: 'AOA'
     }).format(amount);
+  }
+
+  getAbsoluteValue(value: number): number {
+    return Math.abs(value);
   }
 }
