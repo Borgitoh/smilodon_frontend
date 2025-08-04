@@ -282,6 +282,15 @@
                   </div>
                 </div>
 
+                <div class="form-group" *ngIf="newItem.productId === 'manual'">
+                  <label class="form-label">Descrição</label>
+                  <input
+                    type="text"
+                    class="form-input"
+                    [(ngModel)]="newItem.productName"
+                    placeholder="Descrição do item">
+                </div>
+
                 <div class="form-group">
                   <label class="form-label">Quantidade</label>
                   <input
@@ -310,7 +319,8 @@
                 </div>
               </div>
 
-              <button class="add-item-btn" (click)="addItem()" [disabled]="!newItem.productId">
+              <button class="add-item-btn" (click)="addItem()"
+                      [disabled]="(!newItem.productId || (newItem.productId === 'manual' && !newItem.productName)) || newItem.quantity <= 0 || newItem.unitPrice <= 0">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
                   <line x1="12" y1="8" x2="12" y2="16"/>
